@@ -41,8 +41,8 @@ class CalculatorView:
             "height": 55,
         }
 
-        digit_btn = lambda text: ft.ElevatedButton(
-            text=text,
+        digit_btn = lambda t: ft.ElevatedButton(
+            content=ft.Text(t),
             on_click=self._on_digit,
             **btn_style,
             style=ft.ButtonStyle(
@@ -50,8 +50,8 @@ class CalculatorView:
             ),
         )
 
-        op_btn = lambda text, color=Config.COLOR_PRIMARY: ft.ElevatedButton(
-            text=text,
+        op_btn = lambda t, color=Config.COLOR_PRIMARY: ft.ElevatedButton(
+            content=ft.Text(t),
             on_click=self._on_operator,
             **btn_style,
             bgcolor=color,
@@ -80,9 +80,9 @@ class CalculatorView:
                     controls=[
                         ft.Row(
                             controls=[
-                                ft.ElevatedButton("C", on_click=self._on_clear, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
-                                ft.ElevatedButton("⌫", on_click=self._on_backspace, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
-                                ft.ElevatedButton("%", on_click=self._on_percent, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(ft.Text("C"), on_click=self._on_clear, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(ft.Text("⌫"), on_click=self._on_backspace, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(ft.Text("%"), on_click=self._on_percent, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
                                 op_btn("÷"),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
@@ -120,10 +120,10 @@ class CalculatorView:
                         ),
                         ft.Row(
                             controls=[
-                                ft.ElevatedButton("±", on_click=self._on_toggle_sign, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(ft.Text("±"), on_click=self._on_toggle_sign, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
                                 digit_btn("0"),
                                 digit_btn("."),
-                                ft.ElevatedButton("=", on_click=self._on_equals, **btn_style, bgcolor=Config.COLOR_SECONDARY, color=ft.Colors.ON_PRIMARY, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(ft.Text("="), on_click=self._on_equals, **btn_style, bgcolor=Config.COLOR_SECONDARY, color=ft.Colors.ON_PRIMARY, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                             spacing=5,
@@ -177,11 +177,11 @@ class CalculatorView:
                 )
 
     def _on_digit(self, e) -> None:
-        self.controller.input_digit(e.control.text)
+        self.controller.input_digit(e.control.content.value)
         self.update_display()
 
     def _on_operator(self, e) -> None:
-        self.controller.input_operator(e.control.text)
+        self.controller.input_operator(e.control.content.value)
         self.update_display()
 
     def _on_equals(self, e) -> None:
