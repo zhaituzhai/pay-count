@@ -6,8 +6,11 @@ import sys
 import os
 import ssl
 from models.state import AppState
+from models.calculator_state import CalculatorState
 from controllers.event_handler import EventHandler
+from controllers.calculator_controller import CalculatorController
 from views.main_view import MainView
+from views.calculator_view import CalculatorView
 from config import Config
 from models.single_instance_config import SingleInstanceConfig
 from utils.single_instance import SingleInstanceManager
@@ -59,6 +62,10 @@ def main(page: ft.Page) -> None:
     # 创建应用状态
     state = AppState()
 
+    # 创建普通计算器状态和控制器
+    calc_state = CalculatorState()
+    calc_controller = CalculatorController(calc_state)
+
     # 创建界面更新回调函数
     def update_ui() -> None:
         """更新界面"""
@@ -69,8 +76,11 @@ def main(page: ft.Page) -> None:
     # 创建事件处理器
     event_handler = EventHandler(state, update_ui)
 
+    # 创建普通计算器视图
+    calculator_view = CalculatorView(calc_state, calc_controller, page)
+
     # 创建主视图
-    main_view = MainView(state, event_handler, page)
+    main_view = MainView(state, event_handler, page, calculator_view=calculator_view)
 
     # 设置主题
     main_view.setup_theme(state.is_dark_mode)
