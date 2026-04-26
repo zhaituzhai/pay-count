@@ -24,7 +24,7 @@ def build_exe() -> Path:
     # PyInstaller 参数
     args = [
         'main.py',
-        '--name=定价计算器v7',
+        '--name=综合计算器',
         '--onefile',
         '--windowed',
         '--clean',
@@ -57,7 +57,7 @@ def build_exe() -> Path:
     PyInstaller.__main__.run(args)
 
     # 获取生成的 exe 文件路径
-    exe_path = current_dir / "dist" / "定价计算器v7.exe"
+    exe_path = current_dir / "dist" / "综合计算器.exe"
 
     if not exe_path.exists():
         print(f"错误：exe 文件未生成: {exe_path}")
