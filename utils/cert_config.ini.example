@@ -1,0 +1,29 @@
+[certificate]
+# 证书文件路径（相对路径或绝对路径）
+# 示例：certs/my_cert.pfx 或 C:/certs/my_cert.pfx
+cert_path = certs/my_cert.pfx
+
+# 证书密码（建议从环境变量读取，不要明文存储）
+# 推荐方式：设置环境变量 CODE_SIGN_PASSWORD=your_password
+# 如果不设置环境变量，可以在此处填写密码（不推荐）
+# cert_password = your_password
+
+# 时间戳服务器 URL（用于确保证书过期后签名仍然有效）
+# 常用时间戳服务器：
+# - DigiCert: http://timestamp.digicert.com
+# - Symantec: http://timestamp.sectigo.com
+# - GlobalSign: http://timestamp.globalsign.com/scripts/timstamp.dll
+timestamp_url = http://timestamp.digicert.com
+
+# 签名算法（推荐使用 sha256）
+# 可选值：sha256, sha1（sha1 已不推荐使用）
+hash_algorithm = sha256
+
+# 签名描述（显示在文件属性中）
+description = 定价计算器
+
+# 签名 URL（可选，可链接到应用官网）
+# description_url = https://example.com
+
+# 是否包含调试信息
+include_debug = false
