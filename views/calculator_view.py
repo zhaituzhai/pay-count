@@ -177,25 +177,35 @@ class CalculatorView:
     def _on_keyboard(self, e: ft.KeyboardEvent) -> None:
         if not self._focused:
             return
-        if e.key.isdigit():
-            self.controller.input_digit(e.key)
-        elif e.key == ".":
+        key = e.key
+        numpad_map = {
+            "Numpad 0": "0", "Numpad 1": "1", "Numpad 2": "2",
+            "Numpad 3": "3", "Numpad 4": "4", "Numpad 5": "5",
+            "Numpad 6": "6", "Numpad 7": "7", "Numpad 8": "8",
+            "Numpad 9": "9", "Numpad Decimal": ".", "Numpad Enter": "Enter",
+            "Numpad Add": "+", "Numpad Subtract": "-",
+            "Numpad Multiply": "*", "Numpad Divide": "/",
+        }
+        key = numpad_map.get(key, key)
+        if key.isdigit():
+            self.controller.input_digit(key)
+        elif key == ".":
             self.controller.input_digit(".")
-        elif e.key == "+":
+        elif key == "+":
             self.controller.input_operator("+")
-        elif e.key == "-":
+        elif key == "-":
             self.controller.input_operator("-")
-        elif e.key == "*":
+        elif key == "*":
             self.controller.input_operator("×")
-        elif e.key == "/":
+        elif key == "/":
             self.controller.input_operator("÷")
-        elif e.key == "Enter":
+        elif key == "Enter":
             self.controller.calculate()
-        elif e.key == "Backspace":
+        elif key == "Backspace":
             self.controller.backspace()
-        elif e.key == "Delete" or e.key == "Escape":
+        elif key == "Delete" or key == "Escape":
             self.controller.state.clear()
-        elif e.key == "%":
+        elif key == "%":
             self.controller.input_percent()
         else:
             return
