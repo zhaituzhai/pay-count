@@ -127,6 +127,40 @@ class TestCalculatorController(unittest.TestCase):
         self.assertEqual(self.state.display, "0")
         self.assertEqual(len(self.state.history), 0)
 
+    def test_chained_calculation(self):
+        self.controller.input_digit("2")
+        self.controller.input_operator("+")
+        self.controller.input_digit("3")
+        self.controller.input_operator("×")
+        self.assertEqual(self.state.display, "5")
+        self.assertEqual(self.state.expression, "5 × ")
+        self.controller.input_digit("4")
+        self.controller.calculate()
+        self.assertEqual(self.state.display, "20")
+
+    def test_continue_after_equals(self):
+        self.controller.input_digit("2")
+        self.controller.input_operator("+")
+        self.controller.input_digit("3")
+        self.controller.calculate()
+        self.assertEqual(self.state.display, "5")
+        self.controller.input_operator("-")
+        self.assertEqual(self.state.expression, "5 - ")
+        self.controller.input_digit("1")
+        self.controller.calculate()
+        self.assertEqual(self.state.display, "4")
+
+    def test_chained_multiple_operators(self):
+        self.controller.input_digit("1")
+        self.controller.input_digit("0")
+        self.controller.input_operator("+")
+        self.controller.input_digit("5")
+        self.controller.input_operator("÷")
+        self.assertEqual(self.state.display, "15")
+        self.controller.input_digit("3")
+        self.controller.calculate()
+        self.assertEqual(self.state.display, "5")
+
 
 class TestCalculatorRecord(unittest.TestCase):
 
