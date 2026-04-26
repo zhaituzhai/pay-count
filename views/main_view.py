@@ -110,6 +110,7 @@ class MainView:
                 self._pricing_content,
                 self._calculator_content,
             ],
+            expand=True,
         )
 
         self.top_tabs = ft.Tabs(
