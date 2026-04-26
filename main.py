@@ -57,7 +57,7 @@ def main(page: ft.Page) -> None:
 
     # 设置窗口大小
     page.window.width = 500
-    page.window.height = 785
+    page.window.height = 800
 
     # 创建应用状态
     state = AppState()

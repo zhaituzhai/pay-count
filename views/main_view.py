@@ -121,6 +121,7 @@ class MainView:
             length=self._top_tab_count,
             selected_index=0,
             animation_duration=300,
+            on_change=self._on_top_tab_change,
         )
 
     def build(self) -> ft.Column:
@@ -227,3 +228,9 @@ class MainView:
             self.event_handler.on_mode_change(CalculationMode.PRICE_TO_COST)
         else:
             self.event_handler.on_mode_change(CalculationMode.COST_PRICE_TO_PROFIT)
+
+    def _on_top_tab_change(self, e) -> None:
+        """顶层标签页切换事件处理"""
+        selected_index = int(e.data)
+        if self.calculator_view:
+            self.calculator_view.set_focused(selected_index == 1)

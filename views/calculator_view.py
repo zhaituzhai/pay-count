@@ -35,14 +35,20 @@ class CalculatorView:
             spacing=4,
         )
 
+        self._focused = False
+        page.on_keyboard_event = self._on_keyboard
+
+    def _make_btn_text(self, t, size=22):
+        return ft.Text(t, size=size, weight=ft.FontWeight.W_600)
+
     def build(self) -> ft.Column:
         btn_style = {
             "width": 70,
-            "height": 55,
+            "height": 58,
         }
 
         digit_btn = lambda t: ft.ElevatedButton(
-            content=ft.Text(t),
+            content=self._make_btn_text(t, 24),
             on_click=self._on_digit,
             **btn_style,
             style=ft.ButtonStyle(
@@ -51,11 +57,20 @@ class CalculatorView:
         )
 
         op_btn = lambda t, color=Config.COLOR_PRIMARY: ft.ElevatedButton(
-            content=ft.Text(t),
+            content=self._make_btn_text(t, 22),
             on_click=self._on_operator,
             **btn_style,
             bgcolor=color,
             color=ft.Colors.ON_PRIMARY,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=8),
+            ),
+        )
+
+        func_btn = lambda t, handler: ft.ElevatedButton(
+            content=self._make_btn_text(t, 20),
+            on_click=handler,
+            **btn_style,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=8),
             ),
@@ -80,9 +95,9 @@ class CalculatorView:
                     controls=[
                         ft.Row(
                             controls=[
-                                ft.ElevatedButton(ft.Text("C"), on_click=self._on_clear, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
-                                ft.ElevatedButton(ft.Text("⌫"), on_click=self._on_backspace, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
-                                ft.ElevatedButton(ft.Text("%"), on_click=self._on_percent, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                func_btn("C", self._on_clear),
+                                func_btn("⌫", self._on_backspace),
+                                func_btn("%", self._on_percent),
                                 op_btn("÷"),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
@@ -120,10 +135,17 @@ class CalculatorView:
                         ),
                         ft.Row(
                             controls=[
-                                ft.ElevatedButton(ft.Text("±"), on_click=self._on_toggle_sign, **btn_style, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                func_btn("±", self._on_toggle_sign),
                                 digit_btn("0"),
                                 digit_btn("."),
-                                ft.ElevatedButton(ft.Text("="), on_click=self._on_equals, **btn_style, bgcolor=Config.COLOR_SECONDARY, color=ft.Colors.ON_PRIMARY, style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))),
+                                ft.ElevatedButton(
+                                    content=self._make_btn_text("=", 24),
+                                    on_click=self._on_equals,
+                                    **btn_style,
+                                    bgcolor=Config.COLOR_SECONDARY,
+                                    color=ft.Colors.ON_PRIMARY,
+                                    style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8)),
+                                ),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                             spacing=5,
@@ -151,6 +173,36 @@ class CalculatorView:
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             scroll=ft.ScrollMode.AUTO,
         )
+
+    def _on_keyboard(self, e: ft.KeyboardEvent) -> None:
+        if not self._focused:
+            return
+        if e.key.isdigit():
+            self.controller.input_digit(e.key)
+        elif e.key == ".":
+            self.controller.input_digit(".")
+        elif e.key == "+":
+            self.controller.input_operator("+")
+        elif e.key == "-":
+            self.controller.input_operator("-")
+        elif e.key == "*":
+            self.controller.input_operator("×")
+        elif e.key == "/":
+            self.controller.input_operator("÷")
+        elif e.key == "Enter":
+            self.controller.calculate()
+        elif e.key == "Backspace":
+            self.controller.backspace()
+        elif e.key == "Delete" or e.key == "Escape":
+            self.controller.state.clear()
+        elif e.key == "%":
+            self.controller.input_percent()
+        else:
+            return
+        self.update_display()
+
+    def set_focused(self, focused: bool) -> None:
+        self._focused = focused
 
     def update_display(self) -> None:
         self._display_text.value = self.state.display
