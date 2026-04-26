@@ -36,7 +36,7 @@ class AppState:
     input_currency: InputCurrency = InputCurrency.CNY  # 输入币种，默认人民币
 
     # 毛利率范围设置
-    rate_min: float = 0.09                    # 最小毛利率（9%）
+    rate_min: float = 0.01                    # 最小毛利率（1%）
     rate_max: float = 0.45                    # 最大毛利率（45%）
 
     # 汇率设置（1人民币 = X港币）
